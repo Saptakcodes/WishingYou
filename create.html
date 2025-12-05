@@ -1,0 +1,1186 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
+    <title>✨ Create Celebration Card | Celebration Wishes ✨</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'neon-pink': '#ff00ff',
+                        'neon-blue': '#00ffff',
+                        'neon-green': '#39ff14',
+                        'neon-yellow': '#ffff00',
+                        'neon-purple': '#bf00ff'
+                    },
+                    animation: {
+                        'rainbow': 'rainbow 8s linear infinite',
+                        'pulse-glow': 'pulseGlow 2s ease-in-out infinite',
+                        'float-slow': 'float 6s ease-in-out infinite',
+                        'float-fast': 'float 3s ease-in-out infinite',
+                        'spin-slow': 'spin 20s linear infinite',
+                        'wiggle': 'wiggle 1s ease-in-out infinite',
+                        'bounce-slow': 'bounce 3s infinite',
+                        'shimmer': 'shimmer 3s infinite',
+                        'confetti-fall': 'confettiFall 5s linear infinite',
+                        'pop-in': 'popIn 0.5s ease-out',
+                        'success-pop': 'popIn 0.5s ease-out'
+                    },
+                    keyframes: {
+                        rainbow: {
+                            '0%': { 'background-position': '0% 50%' },
+                            '50%': { 'background-position': '100% 50%' },
+                            '100%': { 'background-position': '0% 50%' }
+                        },
+                        popIn: {
+                            '0%': { transform: 'scale(0.5)', opacity: 0 },
+                            '100%': { transform: 'scale(1)', opacity: 1 }
+                        },
+                        pulseGlow: {
+                            '0%, 100%': { 
+                                'box-shadow': '0 0 5px currentColor, 0 0 10px currentColor' 
+                            },
+                            '50%': { 
+                                'box-shadow': '0 0 20px currentColor, 0 0 40px currentColor' 
+                            }
+                        },
+                        float: {
+                            '0%, 100%': { transform: 'translateY(0px)' },
+                            '50%': { transform: 'translateY(-20px)' }
+                        },
+                        wiggle: {
+                            '0%, 100%': { transform: 'rotate(-3deg)' },
+                            '50%': { transform: 'rotate(3deg)' }
+                        },
+                        shimmer: {
+                            '0%': { 'background-position': '-200% 0' },
+                            '100%': { 'background-position': '200% 0' }
+                        },
+                        confettiFall: {
+                            '0%': { transform: 'translateY(-100px) rotate(0deg)', opacity: 1 },
+                            '100%': { transform: 'translateY(100vh) rotate(360deg)', opacity: 0 }
+                        }
+                    }
+                }
+            }
+        }
+    </script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800;900&family=Comic+Neue:wght@700&display=swap" rel="stylesheet">
+    <style>
+        * {
+            font-family: 'Nunito', sans-serif;
+        }
+        .pacifico {
+            font-family: 'Pacifico', cursive;
+        }
+        .comic {
+            font-family: 'Comic Neue', cursive;
+        }
+        
+        /* Rainbow text animation */
+        .rainbow-text {
+            background: linear-gradient(
+                90deg,
+                #ff0000,
+                #ff9900,
+                #ffff00,
+                #00ff00,
+                #00ffff,
+                #0000ff,
+                #9900ff,
+                #ff00ff
+            );
+            background-size: 400% 400%;
+            -webkit-background-clip: text;
+            -webkit-text-fill-color: transparent;
+            animation: rainbow 8s ease infinite;
+        }
+        
+        /* Neon glow effect */
+        .neon-glow {
+            text-shadow: 
+                0 0 5px currentColor,
+                0 0 10px currentColor,
+                0 0 20px currentColor,
+                0 0 40px currentColor;
+        }
+        
+        /* Gradient border */
+        .gradient-border {
+            border: 3px solid transparent;
+            background: 
+                linear-gradient(white, white) padding-box,
+                linear-gradient(135deg, 
+                    #ff0000, #ff9900, #ffff00, #00ff00, 
+                    #00ffff, #0000ff, #9900ff, #ff00ff
+                ) border-box;
+        }
+        
+        /* Card preview styling */
+        .card-preview {
+            transition: all 0.3s ease;
+            min-height: 400px;
+        }
+        
+        /* Color option styling */
+        .color-option {
+            cursor: pointer;
+            transition: all 0.2s;
+            border: 2px solid transparent;
+        }
+        .color-option:hover {
+            transform: scale(1.1);
+        }
+        .color-option.selected {
+            border: 3px solid #333;
+            transform: scale(1.1);
+            box-shadow: 0 0 15px rgba(0,0,0,0.2);
+        }
+        
+        /* Template card hover */
+        .template-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.1);
+        }
+        
+        /* Confetti styling */
+        .confetti-particle {
+            position: absolute;
+            width: 8px;
+            height: 8px;
+            pointer-events: none;
+            border-radius: 50%;
+            z-index: 1;
+        }
+        
+        /* Glass morphism effect */
+        .glass-effect {
+            background: rgba(255, 255, 255, 0.25);
+            backdrop-filter: blur(12px);
+            border: 1px solid rgba(255, 255, 255, 0.3);
+        }
+        
+        /* Custom scrollbar */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: linear-gradient(180deg, #ffd1dc, #c1e1ff);
+            border-radius: 10px;
+        }
+        ::-webkit-scrollbar-thumb {
+            background: linear-gradient(180deg, #ff6b6b, #ffd166);
+            border-radius: 10px;
+        }
+        
+        /* Mobile Responsive */
+        @media (max-width: 768px) {
+            .mobile-stack { flex-direction: column !important; }
+            .mobile-text-center { text-align: center !important; }
+            .mobile-p-4 { padding: 1rem !important; }
+            .mobile-space-y-4 > * + * { margin-top: 1rem !important; }
+            .mobile-w-full { width: 100% !important; }
+            .mobile-h-auto { height: auto !important; }
+            .mobile-text-sm { font-size: 0.875rem !important; }
+            .mobile-text-lg { font-size: 1.125rem !important; }
+            .mobile-hidden { display: none !important; }
+            .mobile-block { display: block !important; }
+            
+            /* Better touch targets */
+            button, .color-option, .template-card, .effect-option {
+                min-height: 44px;
+            }
+            
+            input, textarea {
+                font-size: 16px; /* Prevents zoom on iOS */
+            }
+            
+            .card-preview {
+                min-height: 350px;
+            }
+        }
+        
+        @media (max-width: 640px) {
+            .card-preview {
+                min-height: 300px;
+            }
+        }
+        
+        /* Animation for confetti rain */
+        @keyframes confettiRain {
+            0% { transform: translateY(-10px) rotate(0deg); opacity: 1; }
+            100% { transform: translateY(100vh) rotate(720deg); opacity: 0; }
+        }
+        
+        /* Shine effect */
+        .shine-effect {
+            background: linear-gradient(90deg, transparent, rgba(255,255,255,0.4), transparent);
+            background-size: 200% 100%;
+            animation: shine 3s infinite;
+        }
+        
+        @keyframes shine {
+            0% { background-position: -200% 0; }
+            100% { background-position: 200% 0; }
+        }
+    </style>
+</head>
+<body class="bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 min-h-screen overflow-x-hidden">
+    
+    <!-- Animated Background Elements -->
+    <div class="fixed inset-0 overflow-hidden pointer-events-none z-0">
+        <div class="absolute top-10 left-5 w-32 h-32 bg-gradient-to-r from-pink-400 to-rose-500 rounded-full opacity-20 animate-spin-slow"></div>
+        <div class="absolute bottom-1/4 right-10 w-40 h-40 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full opacity-15 animate-spin-slow" style="animation-direction: reverse;"></div>
+        <div class="absolute top-1/3 left-1/3 w-24 h-24 bg-gradient-to-r from-yellow-400 to-orange-500 rounded-full opacity-30 animate-bounce-slow"></div>
+    </div>
+    
+    <!-- Confetti Container -->
+    <div id="confettiContainer" class="fixed inset-0 pointer-events-none z-0"></div>
+
+    <!-- Mobile Navigation (Hidden on Desktop) -->
+    <div class="md:hidden fixed top-0 left-0 right-0 bg-gradient-to-r from-purple-600 to-pink-600 p-4 z-50 shadow-lg">
+        <div class="flex justify-between items-center">
+            <a href="index.html" class="text-white text-lg font-bold flex items-center">
+                <i class="fas fa-arrow-left mr-2"></i>
+                <span class="rainbow-text font-bold">Back</span>
+            </a>
+            <button id="mobileMenuBtn" class="text-white text-2xl">
+                <i class="fas fa-bars"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="container mx-auto px-4 md:px-6 py-20 md:py-8 relative z-10">
+        
+        <!-- Desktop Header -->
+        <header class="hidden md:flex justify-between items-center mb-8 md:mb-10">
+            <a href="index.html" class="flex items-center group">
+                <div class="w-12 h-12 rounded-full bg-gradient-to-r from-purple-500 to-pink-500 flex items-center justify-center mr-3 group-hover:scale-110 transition-transform animate-pulse-glow">
+                    <i class="fas fa-arrow-left text-white text-xl"></i>
+                </div>
+                <div>
+                    <h1 class="text-3xl md:text-4xl font-bold pacifico rainbow-text">
+                        ✨ Celebration Wishes ✨
+                    </h1>
+                    <p class="text-sm md:text-base text-gray-600">🎉 Create & Share Magical Greetings 🎉</p>
+                </div>
+            </a>
+            <div class="text-right">
+                <div class="flex items-center space-x-2 justify-end">
+                    <div class="w-4 h-4 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full animate-pulse"></div>
+                    <p class="text-gray-700 font-semibold">🎨 Live Preview Active</p>
+                </div>
+                <div class="flex items-center justify-end mt-2 space-x-2">
+                    <div class="w-3 h-3 rounded-full bg-gradient-to-r from-cyan-500 to-blue-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-gradient-to-r from-pink-500 to-rose-500"></div>
+                    <div class="w-3 h-3 rounded-full bg-gradient-to-r from-amber-500 to-orange-500"></div>
+                    <p class="text-sm text-gray-600">Step 1 → Step 2 → Step 3</p>
+                </div>
+            </div>
+        </header>
+
+        <div class="grid lg:grid-cols-2 gap-6 md:gap-8 max-w-7xl mx-auto mt-16 md:mt-0">
+            
+            <!-- Left Column: Form (Stack on Mobile) -->
+            <div class="glass-effect rounded-3xl p-6 md:p-8 shadow-2xl relative overflow-hidden">
+                <!-- Background Gradient Circles -->
+                <div class="absolute -top-20 -right-20 w-40 h-40 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-full opacity-10 blur-3xl"></div>
+                <div class="absolute -bottom-20 -left-20 w-40 h-40 bg-gradient-to-r from-pink-400 to-rose-500 rounded-full opacity-10 blur-3xl"></div>
+                
+                <div class="flex items-center mb-6 md:mb-8">
+                    <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center mr-4 animate-pulse-glow">
+                        <i class="fas fa-magic text-white text-xl md:text-2xl animate-spin-slow"></i>
+                    </div>
+                    <div>
+                        <h2 class="text-2xl md:text-3xl font-bold text-gray-800">✨ Create Your Magic Card ✨</h2>
+                        <p class="text-gray-600 text-sm md:text-base">Fill details → Add magic → Share instantly!</p>
+                    </div>
+                </div>
+                
+                <form id="celebrationForm" class="space-y-6 md:space-y-8">
+                    
+                    <!-- Occasion Selection (Horizontal Scroll on Mobile) -->
+                    <div>
+                        <label class="block text-lg md:text-xl font-semibold mb-3 md:mb-4 text-gray-800 flex items-center">
+                            <i class="fas fa-gift mr-2 text-pink-500"></i> Select Occasion
+                        </label>
+                        <div class="flex md:grid md:grid-cols-2 lg:grid-cols-4 gap-3 md:gap-4 overflow-x-auto pb-4 md:overflow-visible">
+                            <div class="occasion-option flex-shrink-0 w-32 md:w-auto text-center p-4 rounded-2xl border-2 border-gray-200 cursor-pointer transition-all duration-300 group hover:scale-105 hover:shadow-xl bg-gradient-to-br from-cyan-50 to-blue-50" data-occasion="birthday">
+                                <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-r from-cyan-500 to-blue-600 flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
+                                    <i class="fas fa-birthday-cake text-white text-lg md:text-xl"></i>
+                                </div>
+                                <p class="font-medium text-gray-800 text-sm md:text-base">🎂 Birthday</p>
+                            </div>
+                            <div class="occasion-option flex-shrink-0 w-32 md:w-auto text-center p-4 rounded-2xl border-2 border-gray-200 cursor-pointer transition-all duration-300 group hover:scale-105 hover:shadow-xl bg-gradient-to-br from-emerald-50 to-green-50" data-occasion="achievement">
+                                <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-r from-emerald-500 to-green-600 flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
+                                    <i class="fas fa-trophy text-white text-lg md:text-xl"></i>
+                                </div>
+                                <p class="font-medium text-gray-800 text-sm md:text-base">🏆 Achievement</p>
+                            </div>
+                            <div class="occasion-option flex-shrink-0 w-32 md:w-auto text-center p-4 rounded-2xl border-2 border-gray-200 cursor-pointer transition-all duration-300 group hover:scale-105 hover:shadow-xl bg-gradient-to-br from-amber-50 to-orange-50" data-occasion="special">
+                                <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-r from-amber-500 to-orange-600 flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
+                                    <i class="fas fa-star text-white text-lg md:text-xl"></i>
+                                </div>
+                                <p class="font-medium text-gray-800 text-sm md:text-base">⭐ Special Day</p>
+                            </div>
+                            <div class="occasion-option flex-shrink-0 w-32 md:w-auto text-center p-4 rounded-2xl border-2 border-gray-200 cursor-pointer transition-all duration-300 group hover:scale-105 hover:shadow-xl bg-gradient-to-br from-purple-50 to-pink-50" data-occasion="surprise">
+                                <div class="w-12 h-12 md:w-14 md:h-14 rounded-full bg-gradient-to-r from-purple-500 to-pink-600 flex items-center justify-center mx-auto mb-2 group-hover:scale-110 transition-transform">
+                                    <i class="fas fa-sparkles text-white text-lg md:text-xl"></i>
+                                </div>
+                                <p class="font-medium text-gray-800 text-sm md:text-base">🎁 Surprise</p>
+                            </div>
+                        </div>
+                        <input type="hidden" id="occasion" value="birthday">
+                    </div>
+
+                    <!-- Recipient & Message (Stack on Mobile) -->
+                    <div class="grid md:grid-cols-2 gap-4 md:gap-6">
+                        <div>
+                            <label for="recipientName" class="block text-base md:text-lg font-semibold mb-2 text-gray-800 flex items-center">
+                                <i class="fas fa-user-circle mr-2 text-cyan-500"></i> Recipient's Name
+                            </label>
+                            <input type="text" id="recipientName" placeholder="Enter name here 🎯" 
+                                   class="w-full p-3 md:p-4 rounded-2xl border-2 border-gray-200 focus:border-cyan-400 focus:outline-none focus:ring-2 focus:ring-cyan-200 transition-all bg-white/50 text-sm md:text-base">
+                        </div>
+                        <div>
+                            <label for="senderName" class="block text-base md:text-lg font-semibold mb-2 text-gray-800 flex items-center">
+                                <i class="fas fa-signature mr-2 text-purple-500"></i> Your Name
+                            </label>
+                            <input type="text" id="senderName" placeholder="Your name here ✍️" 
+                                   class="w-full p-3 md:p-4 rounded-2xl border-2 border-gray-200 focus:border-purple-400 focus:outline-none focus:ring-2 focus:ring-purple-200 transition-all bg-white/50 text-sm md:text-base">
+                        </div>
+                    </div>
+
+                    <!-- Your Message -->
+                    <div>
+                        <label for="message" class="block text-base md:text-lg font-semibold mb-2 text-gray-800 flex items-center">
+                            <i class="fas fa-comment-alt mr-2 text-emerald-500"></i> Celebration Message
+                        </label>
+                        <textarea id="message" rows="3" placeholder="Write magical message here... ✨💌" 
+                                 class="w-full p-3 md:p-4 rounded-2xl border-2 border-gray-200 focus:border-emerald-400 focus:outline-none focus:ring-2 focus:ring-emerald-200 transition-all bg-white/50 text-sm md:text-base"></textarea>
+                        <p class="text-xs md:text-sm text-gray-500 mt-2">💡 Add emojis for extra fun! 🎉✨🥳🎈</p>
+                    </div>
+
+                    <!-- Photo Upload -->
+                    <div>
+                        <label class="block text-base md:text-lg font-semibold mb-2 text-gray-800 flex items-center">
+                            <i class="fas fa-camera mr-2 text-pink-500"></i> Add a Photo
+                        </label>
+                        <div class="border-2 border-dashed border-gray-300 rounded-2xl p-6 text-center bg-gradient-to-br from-gray-50 to-white hover:border-cyan-400 transition-all duration-300 group">
+                            <i class="fas fa-cloud-upload-alt text-4xl md:text-5xl text-gray-400 mb-3 group-hover:text-cyan-500 transition-colors animate-bounce-slow"></i>
+                            <p class="text-gray-600 text-sm md:text-base mb-2">📸 Drag & drop or click to browse</p>
+                            <p class="text-xs md:text-sm text-gray-500 mb-4">JPG, PNG up to 2MB</p>
+                            <input type="file" id="photoUpload" accept="image/*" class="hidden">
+                            <button type="button" id="uploadButton" 
+                                   class="px-6 py-3 bg-gradient-to-r from-gray-200 to-gray-300 text-gray-800 font-semibold rounded-xl hover:from-cyan-100 hover:to-blue-100 transition-all duration-300 group-hover:scale-105 text-sm md:text-base">
+                                📁 Choose Photo
+                            </button>
+                        </div>
+                        <div id="photoPreview" class="mt-4 hidden">
+                            <div class="flex items-center justify-between bg-gradient-to-r from-emerald-50 to-green-50 rounded-2xl p-4">
+                                <div class="flex items-center">
+                                    <img id="previewPhoto" class="w-16 h-16 md:w-20 md:h-20 object-cover rounded-xl mr-3 md:mr-4 border-2 border-white shadow-lg">
+                                    <div>
+                                        <p class="font-medium text-gray-800 text-sm md:text-base">Photo Selected 📷</p>
+                                        <p class="text-xs md:text-sm text-gray-600">Ready to shine! ✨</p>
+                                    </div>
+                                </div>
+                                <button type="button" id="removePhoto" 
+                                       class="px-3 py-2 md:px-4 md:py-2 bg-gradient-to-r from-red-100 to-pink-100 text-red-600 font-semibold rounded-xl hover:from-red-200 hover:to-pink-200 transition-all duration-300 text-sm md:text-base">
+                                    ❌ Remove
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Template Selection (Vertical on Mobile) -->
+                    <div>
+                        <label class="block text-base md:text-lg font-semibold mb-3 md:mb-4 text-gray-800 flex items-center">
+                            <i class="fas fa-palette mr-2 text-amber-500"></i> Choose Template
+                        </label>
+                        <div class="grid grid-cols-1 md:grid-cols-3 gap-4 md:gap-6">
+                            <div class="template-card group p-4 rounded-2xl border-2 border-gray-200 cursor-pointer transition-all duration-300 hover:border-cyan-400 hover:scale-105 bg-gradient-to-br from-white to-cyan-50/50" data-template="1">
+                                <div class="h-32 md:h-48 rounded-xl mb-3 md:mb-4 bg-gradient-to-br from-cyan-400 via-blue-500 to-purple-600 relative overflow-hidden">
+                                    <div class="absolute inset-0 shine-effect"></div>
+                                    <div class="absolute bottom-3 left-3 w-6 h-6 md:w-8 md:h-8 bg-white/30 rounded-full"></div>
+                                    <div class="absolute top-3 right-3 w-4 h-4 md:w-6 md:h-6 bg-white/30 rounded-full"></div>
+                                </div>
+                                <h4 class="font-bold text-base md:text-lg mb-1 md:mb-2 text-gray-800">🌊 Ocean Breeze</h4>
+                                <p class="text-gray-600 text-xs md:text-sm">Calm waves with floating bubbles</p>
+                            </div>
+                            <div class="template-card group p-4 rounded-2xl border-2 border-gray-200 cursor-pointer transition-all duration-300 hover:border-purple-400 hover:scale-105 bg-gradient-to-br from-white to-purple-50/50" data-template="2">
+                                <div class="h-32 md:h-48 rounded-xl mb-3 md:mb-4 bg-gradient-to-br from-purple-900 via-pink-800 to-rose-900 relative overflow-hidden">
+                                    <div class="absolute inset-0" style="background: radial-gradient(circle at 30% 30%, rgba(255,255,255,0.1) 0%, transparent 50%);"></div>
+                                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-8 h-8 md:w-12 md:h-12 bg-gradient-to-r from-purple-500 to-pink-500 rounded-full animate-pulse-glow"></div>
+                                </div>
+                                <h4 class="font-bold text-base md:text-lg mb-1 md:mb-2 text-gray-800">🌌 Neon Dream</h4>
+                                <p class="text-gray-600 text-xs md:text-sm">Glowing effects with hearts</p>
+                            </div>
+                            <div class="template-card group p-4 rounded-2xl border-2 border-gray-200 cursor-pointer transition-all duration-300 hover:border-amber-400 hover:scale-105 bg-gradient-to-br from-white to-amber-50/50" data-template="3">
+                                <div class="h-32 md:h-48 rounded-xl mb-3 md:mb-4 bg-gradient-to-br from-amber-200 via-yellow-300 to-orange-300 relative overflow-hidden">
+                                    <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-amber-500 to-transparent"></div>
+                                    <div class="absolute bottom-0 left-0 right-0 h-1 bg-gradient-to-r from-transparent via-orange-500 to-transparent"></div>
+                                    <div class="absolute top-1/2 left-1/2 transform -translate-x-1/2 -translate-y-1/2 w-10 h-10 md:w-16 md:h-16 bg-gradient-to-br from-amber-400 to-orange-500 rounded-full shadow-lg"></div>
+                                </div>
+                                <h4 class="font-bold text-base md:text-lg mb-1 md:mb-2 text-gray-800">🌅 Sunset Glow</h4>
+                                <p class="text-gray-600 text-xs md:text-sm">Warm golden rays & sparkles</p>
+                            </div>
+                        </div>
+                        <input type="hidden" id="template" value="1">
+                    </div>
+
+                    <!-- Color Theme (Scrollable on Mobile) -->
+                    <div>
+                        <label class="block text-base md:text-lg font-semibold mb-3 md:mb-4 text-gray-800 flex items-center">
+                            <i class="fas fa-fill-drip mr-2 text-fuchsia-500"></i> Color Theme
+                        </label>
+                        <div class="grid grid-cols-6 md:grid-cols-8 lg:grid-cols-10 gap-2 md:gap-3 overflow-x-auto pb-4 md:overflow-visible">
+                            <!-- Extended color options -->
+                            <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-lg" data-color="ocean"></div>
+                            <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-emerald-400 to-green-500 rounded-lg" data-color="forest"></div>
+                            <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-amber-400 to-orange-500 rounded-lg" data-color="sunset"></div>
+                            <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-purple-400 to-pink-500 rounded-lg" data-color="berry"></div>
+                            <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-rose-400 to-red-500 rounded-lg" data-color="coral"></div>
+                            <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-violet-400 to-indigo-500 rounded-lg" data-color="royal"></div>
+                            <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-teal-400 to-cyan-500 rounded-lg" data-color="mint"></div>
+                            <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-fuchsia-400 to-purple-500 rounded-lg" data-color="magenta"></div>
+                            <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-lime-400 to-green-500 rounded-lg" data-color="lime"></div>
+                            <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-pink-400 to-rose-500 rounded-lg" data-color="blush"></div>
+                            <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-amber-300 to-yellow-400 rounded-lg" data-color="gold"></div>
+                            <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-blue-400 to-cyan-500 rounded-lg" data-color="aqua"></div>
+                            <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-purple-500 to-blue-500 rounded-lg" data-color="twilight"></div>
+                            <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-orange-400 to-red-500 rounded-lg" data-color="fire"></div>
+                        </div>
+                        <input type="hidden" id="colorTheme" value="ocean">
+                    </div>
+
+                    <!-- Effects Selection (Grid on Mobile) -->
+                    <div>
+                        <label class="block text-base md:text-lg font-semibold mb-3 md:mb-4 text-gray-800 flex items-center">
+                            <i class="fas fa-magic mr-2 text-yellow-500"></i> Special Effects
+                        </label>
+                        <div class="grid grid-cols-2 md:grid-cols-4 gap-3 md:gap-4">
+                            <div class="effect-option text-center p-3 md:p-4 rounded-2xl border-2 border-gray-200 cursor-pointer transition-all hover:border-cyan-400 bg-gradient-to-br from-white to-cyan-50" data-effect="confetti">
+                                <i class="fas fa-burst text-2xl md:text-3xl text-cyan-500 mb-1 md:mb-2"></i>
+                                <p class="font-medium text-sm md:text-base">🎊 Confetti</p>
+                            </div>
+                            <div class="effect-option text-center p-3 md:p-4 rounded-2xl border-2 border-gray-200 cursor-pointer transition-all hover:border-purple-400 bg-gradient-to-br from-white to-purple-50" data-effect="music">
+                                <i class="fas fa-music text-2xl md:text-3xl text-purple-500 mb-1 md:mb-2"></i>
+                                <p class="font-medium text-sm md:text-base">🎵 Music</p>
+                            </div>
+                            <div class="effect-option text-center p-3 md:p-4 rounded-2xl border-2 border-gray-200 cursor-pointer transition-all hover:border-amber-400 bg-gradient-to-br from-white to-amber-50" data-effect="sparkles">
+                                <i class="fas fa-sparkles text-2xl md:text-3xl text-amber-500 mb-1 md:mb-2"></i>
+                                <p class="font-medium text-sm md:text-base">✨ Sparkles</p>
+                            </div>
+                            <div class="effect-option text-center p-3 md:p-4 rounded-2xl border-2 border-gray-200 cursor-pointer transition-all hover:border-emerald-400 bg-gradient-to-br from-white to-emerald-50" data-effect="balloons">
+                                <i class="fas fa-cloud text-2xl md:text-3xl text-emerald-500 mb-1 md:mb-2"></i>
+                                <p class="font-medium text-sm md:text-base">🎈 Floating</p>
+                            </div>
+                        </div>
+                        <input type="hidden" id="effects" value="confetti,music,sparkles,balloons">
+                    </div>
+
+                    <!-- Submit Button -->
+                    <div class="pt-4 md:pt-6">
+                        <button type="submit" id="generateButton" 
+                               class="w-full py-4 md:py-5 bg-gradient-to-r from-cyan-500 via-purple-500 to-pink-500 text-white font-bold text-lg md:text-xl rounded-2xl hover:from-cyan-600 hover:via-purple-600 hover:to-pink-600 transition-all duration-300 shadow-2xl hover:shadow-3xl transform hover:-translate-y-1 active:scale-95 flex items-center justify-center group animate-pulse-glow">
+                            <i class="fas fa-wand-magic-sparkles mr-2 md:mr-3 group-hover:rotate-180 transition-transform duration-500"></i> 
+                            <span class="text-sm md:text-base">✨ Generate Magic Link ✨</span>
+                            <i class="fas fa-bolt ml-2 md:ml-3 opacity-0 group-hover:opacity-100 group-hover:translate-x-2 transition-all"></i>
+                        </button>
+                    </div>
+                </form>
+            </div>
+
+            <!-- Right Column: Preview (Below on Mobile) -->
+            <div class="sticky top-20 md:top-8">
+                <div class="glass-effect rounded-3xl p-6 md:p-8 shadow-2xl h-full">
+                    <div class="flex items-center mb-4 md:mb-6">
+                        <div class="w-8 h-8 md:w-10 md:h-10 rounded-full bg-gradient-to-r from-emerald-500 to-green-600 flex items-center justify-center mr-3 animate-pulse">
+                            <i class="fas fa-eye text-white"></i>
+                        </div>
+                        <h2 class="text-xl md:text-3xl font-bold text-gray-800">🔮 Live Preview 🔮</h2>
+                    </div>
+                    <p class="text-gray-600 mb-4 md:mb-6 text-sm md:text-base">Watch your card come alive in real-time! ✨</p>
+                    
+                    <!-- Card Preview -->
+                    <div id="cardPreview" class="card-preview rounded-3xl overflow-hidden shadow-2xl border-2 border-white relative">
+                        <!-- Template 1 Preview -->
+                        <div id="template1Preview" class="h-full bg-gradient-to-br from-cyan-100 via-blue-100 to-purple-100 p-4 md:p-8 relative">
+                            <div class="absolute top-0 left-0 right-0 h-1 bg-gradient-to-r from-cyan-500 via-blue-500 to-purple-500"></div>
+                            <div class="text-center">
+                                <div class="flex justify-center mb-4 md:mb-8">
+                                    <div id="previewPhotoContainer1" class="w-20 h-20 md:w-28 md:h-28 rounded-full bg-gradient-to-r from-cyan-300 to-blue-400 flex items-center justify-center shadow-xl border-4 border-white animate-float-slow">
+                                        <i id="previewIcon1" class="fas fa-birthday-cake text-white text-2xl md:text-4xl"></i>
+                                    </div>
+                                </div>
+                                <h3 id="previewOccasion" class="text-lg md:text-2xl font-bold text-gray-800 mb-1 md:mb-2">🎂 Happy Birthday</h3>
+                                <h2 id="previewName" class="text-3xl md:text-5xl font-bold mb-4 md:mb-6 bg-gradient-to-r from-cyan-500 to-blue-600 bg-clip-text text-transparent">Alex!</h2>
+                                <div class="bg-white/80 rounded-2xl p-4 md:p-6 mb-4 md:mb-8 backdrop-blur-sm border border-white/50">
+                                    <p id="previewMessage" class="text-gray-700 text-sm md:text-lg italic leading-relaxed">"Wishing you a magical day filled with joy! ✨"</p>
+                                </div>
+                                <div class="text-right">
+                                    <p id="previewSender" class="text-gray-600 text-sm md:text-base">From your friend, <span class="font-bold text-blue-600">Jordan</span></p>
+                                </div>
+                                <div class="mt-4 md:mt-8 flex justify-center space-x-2 md:space-x-4">
+                                    <div class="w-6 h-8 md:w-10 md:h-14 bg-gradient-to-b from-cyan-400 to-blue-500 rounded-full animate-bounce" style="animation-delay: 0.1s;"></div>
+                                    <div class="w-6 h-8 md:w-10 md:h-14 bg-gradient-to-b from-emerald-400 to-green-500 rounded-full animate-bounce" style="animation-delay: 0.3s;"></div>
+                                    <div class="w-6 h-8 md:w-10 md:h-14 bg-gradient-to-b from-amber-400 to-orange-500 rounded-full animate-bounce" style="animation-delay: 0.5s;"></div>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Template 2 Preview -->
+                        <div id="template2Preview" class="h-full hidden bg-gradient-to-br from-purple-900 via-pink-900 to-rose-900 p-4 md:p-8 relative">
+                            <div class="absolute inset-0 overflow-hidden">
+                                <div class="absolute top-10 left-10 w-40 h-40 bg-purple-500/20 rounded-full blur-3xl"></div>
+                                <div class="absolute bottom-10 right-10 w-60 h-60 bg-pink-500/20 rounded-full blur-3xl"></div>
+                            </div>
+                            <div class="text-center relative z-10 h-full flex flex-col justify-center">
+                                <div class="flex justify-center mb-6 md:mb-10">
+                                    <div id="previewPhotoContainer2" class="w-20 h-20 md:w-32 md:h-32 rounded-full bg-gradient-to-r from-purple-600 to-pink-500 flex items-center justify-center shadow-2xl shadow-purple-500/50 border-4 border-purple-300/30 animate-pulse-glow">
+                                        <i id="previewIcon2" class="fas fa-star text-white text-2xl md:text-4xl"></i>
+                                    </div>
+                                </div>
+                                <h3 id="previewOccasion2" class="text-lg md:text-2xl font-bold text-white mb-3 md:mb-4">🎂 Happy Birthday</h3>
+                                <h2 id="previewName2" class="text-3xl md:text-6xl font-bold mb-6 md:mb-8 text-transparent bg-clip-text bg-gradient-to-r from-purple-400 to-pink-400" style="text-shadow: 0 0 20px rgba(192, 132, 252, 0.5);">Alex!</h2>
+                                <div class="bg-gray-900/50 rounded-2xl p-4 md:p-8 mb-6 md:mb-10 border border-purple-500/30 backdrop-blur-sm">
+                                    <p id="previewMessage2" class="text-gray-200 text-sm md:text-lg italic leading-relaxed">"Wishing you a magical day filled with joy! ✨"</p>
+                                </div>
+                                <div class="text-right">
+                                    <p id="previewSender2" class="text-purple-300 text-sm md:text-base">From your friend, <span class="font-bold text-white">Jordan</span></p>
+                                </div>
+                                <div class="mt-4 md:mt-12 flex justify-center space-x-4 md:space-x-8">
+                                    <i class="fas fa-heart text-pink-500 text-xl md:text-3xl animate-pulse" style="animation-delay: 0.2s;"></i>
+                                    <i class="fas fa-star text-purple-500 text-xl md:text-3xl animate-pulse" style="animation-delay: 0.4s;"></i>
+                                    <i class="fas fa-heart text-rose-500 text-xl md:text-3xl animate-pulse" style="animation-delay: 0.6s;"></i>
+                                </div>
+                            </div>
+                        </div>
+
+                        <!-- Template 3 Preview -->
+                        <div id="template3Preview" class="h-full hidden bg-gradient-to-br from-amber-50 via-yellow-50 to-orange-50 p-4 md:p-8 relative">
+                            <div class="absolute top-0 left-0 right-0 h-2 bg-gradient-to-r from-amber-500 via-orange-500 to-yellow-500"></div>
+                            <div class="text-center h-full flex flex-col justify-center">
+                                <div class="flex justify-center mb-6 md:mb-12">
+                                    <div id="previewPhotoContainer3" class="w-24 h-24 md:w-36 md:h-36 rounded-full border-4 md:border-8 border-amber-200 bg-gradient-to-br from-amber-100 to-yellow-100 flex items-center justify-center shadow-2xl">
+                                        <i id="previewIcon3" class="fas fa-crown text-amber-500 text-3xl md:text-5xl"></i>
+                                    </div>
+                                </div>
+                                <h3 id="previewOccasion3" class="text-base md:text-xl font-semibold text-amber-800 mb-3 md:mb-4">🎂 Happy Birthday</h3>
+                                <h2 id="previewName3" class="text-4xl md:text-6xl font-bold mb-6 md:mb-10 text-amber-900">Alex!</h2>
+                                <div class="border-2 border-amber-200 rounded-2xl p-4 md:p-8 mb-6 md:mb-10 bg-white/50">
+                                    <p id="previewMessage3" class="text-gray-700 text-sm md:text-lg italic leading-relaxed">"Wishing you a magical day filled with joy! ✨"</p>
+                                </div>
+                                <div class="text-center border-t-2 border-amber-200 pt-4 md:pt-6">
+                                    <p id="previewSender3" class="text-amber-800 text-sm md:text-base">From your friend, <span class="font-bold">Jordan</span></p>
+                                </div>
+                                <div class="mt-4 md:mt-12 flex justify-center space-x-3 md:space-x-6">
+                                    <i class="fas fa-gem text-amber-400 text-xl md:text-3xl rotate-12 animate-bounce" style="animation-delay: 0.1s;"></i>
+                                    <i class="fas fa-gem text-amber-500 text-xl md:text-3xl -rotate-12 animate-bounce" style="animation-delay: 0.3s;"></i>
+                                    <i class="fas fa-gem text-yellow-400 text-xl md:text-3xl rotate-12 animate-bounce" style="animation-delay: 0.5s;"></i>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <!-- Generated Link Section -->
+                    <div id="generatedLinkSection" class="mt-4 md:mt-8 hidden">
+                        <div class="mb-4 md:mb-6">
+                            <div class="w-12 h-12 md:w-16 md:h-16 rounded-full bg-gradient-to-r from-green-500 to-emerald-600 flex items-center justify-center mx-auto mb-2 md:mb-4 animate-pulse">
+                                <i class="fas fa-check text-white text-xl md:text-2xl"></i>
+                            </div>
+                            <h3 class="text-lg md:text-2xl font-bold text-center mb-2 md:mb-4 text-gray-800">🎉 Magic Link Ready! 🎉</h3>
+                        </div>
+                        <div class="bg-gradient-to-r from-green-50 to-emerald-50 rounded-3xl p-4 md:p-6 border-2 border-emerald-200">
+                            <p class="text-gray-700 mb-2 md:mb-3 font-medium text-sm md:text-base">✨ Share this magical link:</p>
+                            <div class="flex flex-col md:flex-row items-center mb-3 md:mb-4 gap-2 md:gap-0">
+                                <input type="text" id="generatedLink" readonly 
+                                       class="flex-grow p-3 md:p-4 rounded-2xl border-2 border-emerald-300 bg-white truncate font-mono text-xs md:text-sm w-full">
+                                <button id="copyLinkButton" 
+                                       class="px-4 py-3 md:px-6 md:py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-2xl hover:from-green-600 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl transform hover:-translate-y-1 active:scale-95 text-sm md:text-base w-full md:w-auto mt-2 md:mt-0 md:ml-4">
+                                    📋 Copy Link
+                                </button>
+                            </div>
+                            <p class="text-xs md:text-sm text-gray-600">Open this link to reveal magical animations! ✨</p>
+                        </div>
+                        <div class="mt-4 md:mt-8 grid grid-cols-2 gap-3 md:gap-4">
+                            <a href="#" id="whatsappShare" class="px-4 py-3 md:px-6 md:py-4 bg-gradient-to-r from-green-100 to-emerald-100 text-emerald-600 font-semibold rounded-2xl hover:from-green-200 hover:to-emerald-200 transition-all duration-300 text-center text-sm md:text-base">
+                                <i class="fab fa-whatsapp mr-2"></i> WhatsApp
+                            </a>
+                            <a href="#" id="emailShare" class="px-4 py-3 md:px-6 md:py-4 bg-gradient-to-r from-cyan-100 to-blue-100 text-blue-600 font-semibold rounded-2xl hover:from-cyan-200 hover:to-blue-200 transition-all duration-300 text-center text-sm md:text-base">
+                                <i class="fas fa-envelope mr-2"></i> Email
+                            </a>
+                        </div>
+                        <div class="mt-4 md:mt-6 text-center">
+                            <button id="testLink" class="px-4 py-3 md:px-6 md:py-3 bg-gradient-to-r from-purple-100 to-pink-100 text-purple-600 font-semibold rounded-2xl hover:from-purple-200 hover:to-pink-200 transition-all duration-300 text-sm md:text-base">
+                                <i class="fas fa-play mr-2"></i> 🎬 Test Your Card
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Tips Section -->
+                    <div class="mt-4 md:mt-8 p-4 md:p-6 bg-gradient-to-r from-cyan-50 to-blue-50 rounded-3xl border border-cyan-200">
+                        <h4 class="font-bold text-base md:text-lg mb-2 md:mb-3 text-gray-800 flex items-center">
+                            <i class="fas fa-lightbulb mr-2 text-cyan-500"></i> 💡 Pro Tips:
+                        </h4>
+                        <ul class="text-gray-700 space-y-1 md:space-y-2 text-xs md:text-sm">
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-emerald-500 mt-1 mr-2 text-xs"></i>
+                                <span>Add photos for extra personal touch 📸</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-emerald-500 mt-1 mr-2 text-xs"></i>
+                                <span>Use emojis to make messages sparkle ✨</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-emerald-500 mt-1 mr-2 text-xs"></i>
+                                <span>Try different color combinations 🎨</span>
+                            </li>
+                            <li class="flex items-start">
+                                <i class="fas fa-check text-emerald-500 mt-1 mr-2 text-xs"></i>
+                                <span>Share during special moments 🎉</span>
+                            </li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Success Popup -->
+    <div id="successPopup" class="fixed inset-0 bg-black/70 backdrop-blur-sm flex items-center justify-center z-50 hidden">
+        <div class="bg-gradient-to-br from-white to-gray-50 rounded-3xl p-6 md:p-10 max-w-md mx-4 text-center border-2 border-white shadow-2xl animate-pop-in">
+            <div class="w-20 h-20 md:w-28 md:h-28 bg-gradient-to-r from-green-400 to-emerald-500 rounded-full flex items-center justify-center mx-auto mb-4 md:mb-6 shadow-2xl">
+                <i class="fas fa-check text-white text-3xl md:text-5xl"></i>
+            </div>
+            <h3 class="text-xl md:text-3xl font-bold mb-3 md:mb-4 text-gray-800">✨ Magic Link Created! ✨</h3>
+            <p class="text-gray-600 mb-4 md:mb-6 text-sm md:text-base">Your celebration link is ready to spread joy! 🎉</p>
+            <div class="space-y-3 md:space-y-4">
+                <button id="closePopup" class="w-full px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-green-500 to-emerald-600 text-white font-bold rounded-2xl hover:from-green-600 hover:to-emerald-700 transition-all duration-300 shadow-lg hover:shadow-xl text-sm md:text-base">
+                    🎨 Continue Creating
+                </button>
+                <button id="viewNow" class="w-full px-6 py-3 md:px-8 md:py-4 bg-gradient-to-r from-cyan-500 to-blue-600 text-white font-bold rounded-2xl hover:from-cyan-600 hover:to-blue-700 transition-all duration-300 shadow-lg hover:shadow-xl text-sm md:text-base">
+                    🔮 View Card Now
+                </button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Mobile Floating Action Button -->
+    <button id="mobileGenerateBtn" class="md:hidden fixed bottom-6 right-6 z-40 w-16 h-16 bg-gradient-to-r from-cyan-500 to-purple-500 rounded-full flex items-center justify-center shadow-2xl hover:shadow-3xl transition-all duration-300 hover:scale-110 animate-pulse">
+        <i class="fas fa-wand-magic-sparkles text-white text-2xl"></i>
+    </button>
+
+    <script>
+        // Initialize variables
+        let uploadedPhotoBase64 = null;
+        let currentCardId = null;
+        
+        // Occasion data mapping (from previous version)
+        const occasionData = {
+            birthday: {
+                title: "Happy Birthday",
+                icon: "fa-birthday-cake",
+                color: "from-cyan-500 to-blue-600"
+            },
+            achievement: {
+                title: "Congratulations",
+                icon: "fa-trophy",
+                color: "from-emerald-500 to-green-600"
+            },
+            special: {
+                title: "Special Day",
+                icon: "fa-star",
+                color: "from-amber-500 to-orange-600"
+            },
+            surprise: {
+                title: "Surprise!",
+                icon: "fa-sparkles",
+                color: "from-purple-500 to-pink-600"
+            }
+        };
+        
+        // Color theme mapping (from previous version)
+        const colorThemes = {
+            ocean: { bg: 'from-cyan-100 via-blue-100 to-purple-100', text: 'from-cyan-500 to-blue-600' },
+            forest: { bg: 'from-emerald-100 via-green-100 to-teal-100', text: 'from-emerald-500 to-green-600' },
+            sunset: { bg: 'from-amber-100 via-orange-100 to-red-100', text: 'from-amber-500 to-orange-600' },
+            berry: { bg: 'from-purple-100 via-pink-100 to-rose-100', text: 'from-purple-500 to-pink-600' },
+            coral: { bg: 'from-rose-100 via-red-100 to-pink-100', text: 'from-rose-500 to-red-600' },
+            royal: { bg: 'from-violet-100 via-indigo-100 to-purple-100', text: 'from-violet-500 to-indigo-600' },
+            mint: { bg: 'from-teal-100 via-cyan-100 to-emerald-100', text: 'from-teal-500 to-cyan-600' },
+            magenta: { bg: 'from-fuchsia-100 via-purple-100 to-pink-100', text: 'from-fuchsia-500 to-purple-600' },
+            lime: { bg: 'from-lime-100 via-green-100 to-emerald-100', text: 'from-lime-500 to-green-600' },
+            sky: { bg: 'from-sky-100 via-blue-100 to-cyan-100', text: 'from-sky-500 to-blue-600' },
+            blush: { bg: 'from-pink-100 via-rose-100 to-red-100', text: 'from-pink-500 to-rose-600' },
+            gold: { bg: 'from-amber-100 via-yellow-100 to-orange-100', text: 'from-amber-500 to-yellow-600' },
+            aqua: { bg: 'from-blue-100 via-cyan-100 to-teal-100', text: 'from-blue-500 to-cyan-600' },
+            twilight: { bg: 'from-purple-100 via-blue-100 to-indigo-100', text: 'from-purple-500 to-blue-600' },
+            fire: { bg: 'from-orange-100 via-red-100 to-amber-100', text: 'from-orange-500 to-red-600' }
+        };
+        
+        // Preview elements mapping (from previous version)
+        const previewElements = {
+            name: ['previewName', 'previewName2', 'previewName3'],
+            message: ['previewMessage', 'previewMessage2', 'previewMessage3'],
+            sender: ['previewSender', 'previewSender2', 'previewSender3'],
+            occasion: ['previewOccasion', 'previewOccasion2', 'previewOccasion3'],
+            icon: ['previewIcon1', 'previewIcon2', 'previewIcon3'],
+            photo: ['previewPhotoContainer1', 'previewPhotoContainer2', 'previewPhotoContainer3']
+        };
+        
+        // Initialize page
+        document.addEventListener('DOMContentLoaded', function() {
+            createFloatingHearts();
+            startConfettiRain();
+            initializeSelections();
+            setupEventListeners();
+            updatePreview(); // Initialize preview with default values
+        });
+        
+        function initializeSelections() {
+            // Set default occasion as selected
+            document.querySelector('.occasion-option').classList.add('border-cyan-400', 'bg-cyan-50', 'shadow-md');
+            
+            // Set default color as selected
+            document.querySelector('.color-option').classList.add('selected');
+            
+            // Set default effects as selected
+            document.querySelectorAll('.effect-option').forEach(opt => {
+                opt.classList.add('border-emerald-400', 'bg-emerald-50');
+            });
+            
+            // Show template 1 by default
+            showTemplatePreview('1');
+        }
+        
+        function setupEventListeners() {
+            // Occasion selection
+            document.querySelectorAll('.occasion-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.occasion-option').forEach(opt => {
+                        opt.classList.remove('border-cyan-400', 'border-emerald-400', 'border-amber-400', 'border-purple-400', 
+                                           'bg-cyan-50', 'bg-emerald-50', 'bg-amber-50', 'bg-purple-50', 'shadow-md');
+                    });
+                    
+                    const occasion = this.dataset.occasion;
+                    const colorMap = {
+                        birthday: 'cyan',
+                        achievement: 'emerald',
+                        special: 'amber',
+                        surprise: 'purple'
+                    };
+                    
+                    this.classList.add(`border-${colorMap[occasion]}-400`, `bg-${colorMap[occasion]}-50`, 'shadow-md');
+                    document.getElementById('occasion').value = occasion;
+                    updatePreview();
+                });
+            });
+            
+            // Template selection
+            document.querySelectorAll('.template-card').forEach(card => {
+                card.addEventListener('click', function() {
+                    document.querySelectorAll('.template-card').forEach(c => {
+                        c.classList.remove('border-cyan-400', 'border-purple-400', 'border-amber-400', 'shadow-lg');
+                    });
+                    
+                    const template = this.dataset.template;
+                    const colorMap = { '1': 'cyan', '2': 'purple', '3': 'amber' };
+                    
+                    this.classList.add(`border-${colorMap[template]}-400`, 'shadow-lg');
+                    document.getElementById('template').value = template;
+                    showTemplatePreview(template);
+                    updatePreview();
+                });
+            });
+            
+            // Color theme selection
+            document.querySelectorAll('.color-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    document.querySelectorAll('.color-option').forEach(opt => opt.classList.remove('selected'));
+                    this.classList.add('selected');
+                    document.getElementById('colorTheme').value = this.dataset.color;
+                    updatePreview();
+                });
+            });
+            
+            // Effects selection
+            document.querySelectorAll('.effect-option').forEach(option => {
+                option.addEventListener('click', function() {
+                    const effect = this.dataset.effect;
+                    const currentEffects = document.getElementById('effects').value.split(',');
+                    const index = currentEffects.indexOf(effect);
+                    
+                    if (index > -1) {
+                        currentEffects.splice(index, 1);
+                        this.classList.remove('border-emerald-400', 'bg-emerald-50');
+                    } else {
+                        currentEffects.push(effect);
+                        this.classList.add('border-emerald-400', 'bg-emerald-50');
+                    }
+                    
+                    document.getElementById('effects').value = currentEffects.filter(e => e).join(',');
+                });
+            });
+            
+            // Photo upload
+            document.getElementById('uploadButton').addEventListener('click', () => document.getElementById('photoUpload').click());
+            
+            document.getElementById('photoUpload').addEventListener('change', function(event) {
+                const file = event.target.files[0];
+                if (file) {
+                    if (file.size > 2 * 1024 * 1024) {
+                        alert('File size must be less than 2MB. We\'ll optimize it for you.');
+                    }
+                    
+                    const reader = new FileReader();
+                    reader.onload = function(e) {
+                        const img = new Image();
+                        img.onload = function() {
+                            const canvas = document.createElement('canvas');
+                            const ctx = canvas.getContext('2d');
+                            const maxSize = 800;
+                            let width = img.width;
+                            let height = img.height;
+                            
+                            if (width > maxSize || height > maxSize) {
+                                if (width > height) {
+                                    height = (height * maxSize) / width;
+                                    width = maxSize;
+                                } else {
+                                    width = (width * maxSize) / height;
+                                    height = maxSize;
+                                }
+                            }
+                            
+                            canvas.width = width;
+                            canvas.height = height;
+                            ctx.drawImage(img, 0, 0, width, height);
+                            
+                            uploadedPhotoBase64 = canvas.toDataURL('image/jpeg', 0.8);
+                            document.getElementById('previewPhoto').src = uploadedPhotoBase64;
+                            document.getElementById('photoPreview').classList.remove('hidden');
+                            updatePreview();
+                        };
+                        img.src = e.target.result;
+                    };
+                    reader.readAsDataURL(file);
+                }
+            });
+            
+            // Remove photo
+            document.getElementById('removePhoto').addEventListener('click', () => {
+                uploadedPhotoBase64 = null;
+                document.getElementById('photoPreview').classList.add('hidden');
+                document.getElementById('photoUpload').value = '';
+                updatePreview();
+            });
+            
+            // Real-time preview updates
+            ['recipientName', 'message', 'senderName'].forEach(id => {
+                document.getElementById(id).addEventListener('input', updatePreview);
+            });
+            
+            // Form submission
+            document.getElementById('celebrationForm').addEventListener('submit', function(e) {
+                e.preventDefault();
+                
+                if (!document.getElementById('recipientName').value.trim() || 
+                    !document.getElementById('message').value.trim() || 
+                    !document.getElementById('senderName').value.trim()) {
+                    alert('Please fill in all required fields');
+                    return;
+                }
+                
+                // Create confetti effect
+                createConfetti();
+                
+                // Show loading state
+                const generateButton = document.getElementById('generateButton');
+                const originalText = generateButton.innerHTML;
+                generateButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-3"></i> Creating Magic...';
+                generateButton.disabled = true;
+                
+                setTimeout(() => {
+                    const cardData = {
+                        occasion: document.getElementById('occasion').value,
+                        recipientName: document.getElementById('recipientName').value.trim(),
+                        message: document.getElementById('message').value.trim(),
+                        senderName: document.getElementById('senderName').value.trim(),
+                        template: document.getElementById('template').value,
+                        colorTheme: document.getElementById('colorTheme').value,
+                        effects: document.getElementById('effects').value,
+                        photo: uploadedPhotoBase64,
+                        createdAt: new Date().toISOString(),
+                        id: 'card_' + Date.now() + '_' + Math.random().toString(36).substr(2, 12)
+                    };
+                    
+                    // Store in localStorage
+                    localStorage.setItem(cardData.id, JSON.stringify(cardData));
+                    currentCardId = cardData.id;
+                    
+                    // Generate shareable link
+                    const shareLink = `${window.location.origin}/view.html?id=${cardData.id}`;
+                    document.getElementById('generatedLink').value = shareLink;
+                    document.getElementById('generatedLinkSection').classList.remove('hidden');
+                    
+                    // Scroll to generated link section
+                    document.getElementById('generatedLinkSection').scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'nearest'
+                    });
+                    
+                    // Setup share buttons
+                    document.getElementById('whatsappShare').href = 
+                        `https://wa.me/?text=${encodeURIComponent(`Check out this celebration card made for you! ${shareLink}`)}`;
+                    document.getElementById('emailShare').href = 
+                        `mailto:?subject=You've received a celebration card!&body=Click here to view your card: ${shareLink}`;
+                    
+                    // Reset button
+                    generateButton.innerHTML = originalText;
+                    generateButton.disabled = false;
+                    
+                    // Show success popup
+                    setTimeout(() => {
+                        document.getElementById('successPopup').classList.remove('hidden');
+                        navigator.clipboard.writeText(shareLink);
+                    }, 500);
+                }, 1500);
+            });
+            
+            // Copy link to clipboard
+            document.getElementById('copyLinkButton').addEventListener('click', () => {
+                navigator.clipboard.writeText(document.getElementById('generatedLink').value).then(() => {
+                    const button = document.getElementById('copyLinkButton');
+                    const originalText = button.textContent;
+                    button.innerHTML = '<i class="fas fa-check mr-2"></i> Copied!';
+                    button.classList.remove('from-green-500', 'to-emerald-600');
+                    button.classList.add('from-green-600', 'to-emerald-700');
+                    
+                    setTimeout(() => {
+                        button.innerHTML = originalText;
+                        button.classList.remove('from-green-600', 'to-emerald-700');
+                        button.classList.add('from-green-500', 'to-emerald-600');
+                    }, 2000);
+                });
+            });
+            
+            // Test link button
+            document.getElementById('testLink').addEventListener('click', () => {
+                if (currentCardId) {
+                    window.open(`view.html?id=${currentCardId}`, '_blank');
+                }
+            });
+            
+            // Close success popup
+            document.getElementById('closePopup').addEventListener('click', () => {
+                document.getElementById('successPopup').classList.add('hidden');
+            });
+            
+            // View now button
+            document.getElementById('viewNow').addEventListener('click', () => {
+                if (currentCardId) {
+                    window.location.href = `view.html?id=${currentCardId}`;
+                }
+            });
+            
+            // Mobile menu toggle
+            document.getElementById('mobileMenuBtn')?.addEventListener('click', function() {
+                const mobileMenu = document.createElement('div');
+                mobileMenu.className = 'fixed inset-0 bg-gradient-to-br from-purple-600/90 to-pink-600/90 z-50 flex flex-col items-center justify-center animate-pop-in';
+                mobileMenu.innerHTML = `
+                    <button class="absolute top-4 right-4 text-white text-3xl">
+                        <i class="fas fa-times"></i>
+                    </button>
+                    <div class="space-y-6 text-center p-8">
+                        <a href="index.html" class="block text-white text-2xl font-bold hover:text-yellow-300 transition-colors">
+                            <i class="fas fa-home mr-2"></i> Home
+                        </a>
+                        <button onclick="scrollToPreview()" class="block text-white text-2xl font-bold hover:text-yellow-300 transition-colors">
+                            <i class="fas fa-eye mr-2"></i> Preview
+                        </button>
+                        <button onclick="scrollToForm()" class="block text-white text-2xl font-bold hover:text-yellow-300 transition-colors">
+                            <i class="fas fa-edit mr-2"></i> Edit
+                        </button>
+                    </div>
+                `;
+                
+                mobileMenu.querySelector('button').addEventListener('click', () => mobileMenu.remove());
+                document.body.appendChild(mobileMenu);
+            });
+            
+            // Mobile generate button
+            document.getElementById('mobileGenerateBtn')?.addEventListener('click', function() {
+                document.getElementById('generateButton').click();
+                this.classList.add('animate-spin');
+                setTimeout(() => this.classList.remove('animate-spin'), 1000);
+            });
+        }
+        
+        // Show selected template preview
+        function showTemplatePreview(templateId) {
+            ['template1Preview', 'template2Preview', 'template3Preview'].forEach((preview, index) => {
+                const element = document.getElementById(preview);
+                element.classList.toggle('hidden', (index + 1) != templateId);
+            });
+        }
+        
+        // Update preview based on form inputs
+        function updatePreview() {
+            const occasion = document.getElementById('occasion').value;
+            const occasionInfo = occasionData[occasion] || occasionData.birthday;
+            const colorTheme = document.getElementById('colorTheme').value;
+            const theme = colorThemes[colorTheme] || colorThemes.ocean;
+            const templateId = document.getElementById('template').value;
+            
+            // Update all templates
+            for (let i = 1; i <= 3; i++) {
+                // Update occasion
+                const occasionElement = document.getElementById(`previewOccasion${i === 1 ? '' : i}`);
+                if (occasionElement) occasionElement.textContent = occasionInfo.title;
+                
+                // Update icon
+                const iconElement = document.getElementById(`previewIcon${i}`);
+                if (iconElement) iconElement.className = `fas ${occasionInfo.icon} text-white text-${i === 3 ? '3xl md:text-5xl' : '2xl md:text-4xl'}`;
+                
+                // Update photo if exists
+                const photoContainer = document.getElementById(`previewPhotoContainer${i}`);
+                if (photoContainer && uploadedPhotoBase64) {
+                    photoContainer.innerHTML = `<img src="${uploadedPhotoBase64}" class="w-full h-full object-cover rounded-full">`;
+                } else if (photoContainer) {
+                    photoContainer.innerHTML = `<i class="fas ${occasionInfo.icon} text-white text-${i === 3 ? '3xl md:text-5xl' : '2xl md:text-4xl'}"></i>`;
+                }
+                
+                // Update name
+                const nameElement = document.getElementById(`previewName${i === 1 ? '' : i}`);
+                if (nameElement && document.getElementById('recipientName').value) {
+                    nameElement.textContent = document.getElementById('recipientName').value + (i === 3 ? "" : "!");
+                    if (i === 1) {
+                        nameElement.className = `text-3xl md:text-5xl font-bold mb-4 md:mb-6 bg-gradient-to-r ${theme.text} bg-clip-text text-transparent`;
+                    }
+                }
+                
+                // Update message
+                const messageElement = document.getElementById(`previewMessage${i === 1 ? '' : i}`);
+                if (messageElement && document.getElementById('message').value) {
+                    messageElement.textContent = `"${document.getElementById('message').value}"`;
+                }
+                
+                // Update sender
+                const senderElement = document.getElementById(`previewSender${i === 1 ? '' : i}`);
+                if (senderElement && document.getElementById('senderName').value) {
+                    const senderText = i === 1 ? 
+                        `From your friend, <span class="font-bold text-blue-600">${document.getElementById('senderName').value}</span>` :
+                        i === 2 ? 
+                        `From your friend, <span class="font-bold text-white">${document.getElementById('senderName').value}</span>` :
+                        `From your friend, <span class="font-bold">${document.getElementById('senderName').value}</span>`;
+                    senderElement.innerHTML = senderText;
+                }
+                
+                // Update template 1 background
+                if (i === 1 && templateId === '1') {
+                    const template1 = document.getElementById('template1Preview');
+                    if (template1) {
+                        template1.className = `h-full bg-gradient-to-br ${theme.bg} p-4 md:p-8 relative`;
+                    }
+                }
+            }
+        }
+        
+        // Create floating hearts animation (from new version)
+        function createFloatingHearts() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#ffd166', '#06d6a0', '#118ab2', '#ef476f'];
+            const container = document.getElementById('confettiContainer');
+            
+            for (let i = 0; i < 15; i++) {
+                const heart = document.createElement('div');
+                heart.className = 'confetti-particle';
+                heart.innerHTML = '❤️';
+                heart.style.fontSize = Math.random() * 20 + 10 + 'px';
+                heart.style.left = Math.random() * 100 + 'vw';
+                heart.style.top = '-50px';
+                heart.style.color = colors[Math.floor(Math.random() * colors.length)];
+                heart.style.opacity = Math.random() * 0.7 + 0.3;
+                heart.style.zIndex = '0';
+                
+                const animationName = `floatHeart${Date.now()}${i}`;
+                const animation = document.createElement('style');
+                animation.textContent = `
+                    @keyframes ${animationName} {
+                        0% { transform: translateY(0) translateX(0) rotate(0deg); opacity: 0; }
+                        10% { opacity: 1; }
+                        100% { transform: translateY(100vh) translateX(${Math.random() * 100 - 50}px) rotate(${Math.random() * 360}deg); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(animation);
+                
+                heart.style.animation = `${animationName} ${Math.random() * 10 + 10}s linear ${Math.random() * 5}s infinite`;
+                container.appendChild(heart);
+            }
+        }
+        
+        // Start continuous confetti rain
+        function startConfettiRain() {
+            setInterval(() => {
+                createConfetti();
+            }, 3000);
+        }
+        
+        // Create confetti effect (enhanced from both versions)
+        function createConfetti() {
+            const colors = ['#ff6b6b', '#4ecdc4', '#ffd166', '#06d6a0', '#118ab2', '#ef476f', '#06b6d4', '#10b981', '#f59e0b', '#8b5cf6'];
+            const container = document.getElementById('confettiContainer');
+            
+            for (let i = 0; i < 25; i++) {
+                const confetti = document.createElement('div');
+                confetti.className = 'confetti-particle';
+                confetti.style.left = Math.random() * 100 + 'vw';
+                confetti.style.top = '-10px';
+                confetti.style.width = Math.random() * 8 + 4 + 'px';
+                confetti.style.height = Math.random() * 8 + 4 + 'px';
+                confetti.style.backgroundColor = colors[Math.floor(Math.random() * colors.length)];
+                confetti.style.borderRadius = Math.random() > 0.5 ? '50%' : '0';
+                confetti.style.opacity = Math.random() * 0.7 + 0.3;
+                
+                const animationName = `confettiFall${Date.now()}${i}`;
+                const animation = document.createElement('style');
+                animation.textContent = `
+                    @keyframes ${animationName} {
+                        0% { transform: translateY(0) rotate(0deg); opacity: 1; }
+                        100% { transform: translateY(100vh) rotate(${Math.random() * 720}deg); opacity: 0; }
+                    }
+                `;
+                document.head.appendChild(animation);
+                
+                confetti.style.animation = `${animationName} ${Math.random() * 2 + 1}s linear forwards`;
+                container.appendChild(confetti);
+                
+                setTimeout(() => {
+                    confetti.remove();
+                    animation.remove();
+                }, 2000);
+            }
+        }
+        
+        // Mobile-specific scroll functions
+        window.scrollToPreview = function() {
+            document.getElementById('cardPreview').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        };
+        
+        window.scrollToForm = function() {
+            document.getElementById('celebrationForm').scrollIntoView({ 
+                behavior: 'smooth',
+                block: 'start'
+            });
+        };
+    </script>
+</body>
+</html>
