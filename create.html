@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>✨ Create Celebration Card | Celebration Wishes ✨</title>
+    <!-- Add this to both create.html and view.html -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <script>
         tailwind.config = {
@@ -227,6 +229,18 @@
             0% { background-position: -200% 0; }
             100% { background-position: 200% 0; }
         }
+        
+        /* New animations */
+        .animate-heartbeat {
+            animation: heartbeat 1.5s ease-in-out infinite both;
+        }
+        @keyframes heartbeat {
+            0% { transform: scale(1); }
+            25% { transform: scale(1.1); }
+            50% { transform: scale(1); }
+            75% { transform: scale(1.05); }
+            100% { transform: scale(1); }
+        }
     </style>
 </head>
 <body class="bg-gradient-to-br from-pink-100 via-purple-100 to-blue-100 min-h-screen overflow-x-hidden">
@@ -443,7 +457,7 @@
                             <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-cyan-400 to-blue-500 rounded-lg" data-color="ocean"></div>
                             <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-emerald-400 to-green-500 rounded-lg" data-color="forest"></div>
                             <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-amber-400 to-orange-500 rounded-lg" data-color="sunset"></div>
-                            <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-purple-400 to-pink-500 rounded-lg" data-color="berry"></div>
+                            <div class="color-option w-8 h-8 md:w-10 md/h-10 bg-gradient-to-r from-purple-400 to-pink-500 rounded-lg" data-color="berry"></div>
                             <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-rose-400 to-red-500 rounded-lg" data-color="coral"></div>
                             <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-violet-400 to-indigo-500 rounded-lg" data-color="royal"></div>
                             <div class="color-option w-8 h-8 md:w-10 md:h-10 bg-gradient-to-r from-teal-400 to-cyan-500 rounded-lg" data-color="mint"></div>
@@ -609,10 +623,10 @@
                             <p class="text-xs md:text-sm text-gray-600">Open this link to reveal magical animations! ✨</p>
                         </div>
                         <div class="mt-4 md:mt-8 grid grid-cols-2 gap-3 md:gap-4">
-                            <a href="#" id="whatsappShare" class="px-4 py-3 md:px-6 md:py-4 bg-gradient-to-r from-green-100 to-emerald-100 text-emerald-600 font-semibold rounded-2xl hover:from-green-200 hover:to-emerald-200 transition-all duration-300 text-center text-sm md:text-base">
+                            <a href="#" id="whatsappShare" class="px-4 py-3 md:px-6 md:py-4 bg-gradient-to-r from-green-100 to-emerald-100 text-emerald-600 font-semibold rounded-2xl hover:from-green-200 hover:to-emerald-200 transition-all duration-300 text-center text-sm md:text-base" target="_blank">
                                 <i class="fab fa-whatsapp mr-2"></i> WhatsApp
                             </a>
-                            <a href="#" id="emailShare" class="px-4 py-3 md:px-6 md:py-4 bg-gradient-to-r from-cyan-100 to-blue-100 text-blue-600 font-semibold rounded-2xl hover:from-cyan-200 hover:to-blue-200 transition-all duration-300 text-center text-sm md:text-base">
+                            <a href="#" id="emailShare" class="px-4 py-3 md:px-6 md:py-4 bg-gradient-to-r from-cyan-100 to-blue-100 text-blue-600 font-semibold rounded-2xl hover:from-cyan-200 hover:to-blue-200 transition-all duration-300 text-center text-sm md:text-base" target="_blank">
                                 <i class="fas fa-envelope mr-2"></i> Email
                             </a>
                         </div>
@@ -681,7 +695,7 @@
         let uploadedPhotoBase64 = null;
         let currentCardId = null;
         
-        // Occasion data mapping (from previous version)
+        // Occasion data mapping
         const occasionData = {
             birthday: {
                 title: "Happy Birthday",
@@ -705,7 +719,7 @@
             }
         };
         
-        // Color theme mapping (from previous version)
+        // Color theme mapping
         const colorThemes = {
             ocean: { bg: 'from-cyan-100 via-blue-100 to-purple-100', text: 'from-cyan-500 to-blue-600' },
             forest: { bg: 'from-emerald-100 via-green-100 to-teal-100', text: 'from-emerald-500 to-green-600' },
@@ -724,31 +738,21 @@
             fire: { bg: 'from-orange-100 via-red-100 to-amber-100', text: 'from-orange-500 to-red-600' }
         };
         
-        // Preview elements mapping (from previous version)
-        const previewElements = {
-            name: ['previewName', 'previewName2', 'previewName3'],
-            message: ['previewMessage', 'previewMessage2', 'previewMessage3'],
-            sender: ['previewSender', 'previewSender2', 'previewSender3'],
-            occasion: ['previewOccasion', 'previewOccasion2', 'previewOccasion3'],
-            icon: ['previewIcon1', 'previewIcon2', 'previewIcon3'],
-            photo: ['previewPhotoContainer1', 'previewPhotoContainer2', 'previewPhotoContainer3']
-        };
-        
         // Initialize page
         document.addEventListener('DOMContentLoaded', function() {
             createFloatingHearts();
             startConfettiRain();
             initializeSelections();
             setupEventListeners();
-            updatePreview(); // Initialize preview with default values
+            updatePreview();
         });
         
         function initializeSelections() {
             // Set default occasion as selected
-            document.querySelector('.occasion-option').classList.add('border-cyan-400', 'bg-cyan-50', 'shadow-md');
+            document.querySelector('.occasion-option[data-occasion="birthday"]').classList.add('border-cyan-400', 'bg-cyan-50', 'shadow-md');
             
             // Set default color as selected
-            document.querySelector('.color-option').classList.add('selected');
+            document.querySelector('.color-option[data-color="ocean"]').classList.add('selected');
             
             // Set default effects as selected
             document.querySelectorAll('.effect-option').forEach(opt => {
@@ -890,10 +894,11 @@
             document.getElementById('celebrationForm').addEventListener('submit', function(e) {
                 e.preventDefault();
                 
+                // Validation
                 if (!document.getElementById('recipientName').value.trim() || 
                     !document.getElementById('message').value.trim() || 
                     !document.getElementById('senderName').value.trim()) {
-                    alert('Please fill in all required fields');
+                    showToast('Please fill in all required fields', 'warning');
                     return;
                 }
                 
@@ -907,6 +912,7 @@
                 generateButton.disabled = true;
                 
                 setTimeout(() => {
+                    // Prepare card data
                     const cardData = {
                         occasion: document.getElementById('occasion').value,
                         recipientName: document.getElementById('recipientName').value.trim(),
@@ -920,53 +926,105 @@
                         id: 'card_' + Date.now() + '_' + Math.random().toString(36).substr(2, 12)
                     };
                     
-                    // Store in localStorage
+                    console.log('Card data created:', cardData);
+                    
+                    // 1. Store in localStorage for quick access
                     localStorage.setItem(cardData.id, JSON.stringify(cardData));
                     currentCardId = cardData.id;
                     
-                    // Generate shareable link
-                    const shareLink = `${window.location.origin}/view.html?id=${cardData.id}`;
-                    document.getElementById('generatedLink').value = shareLink;
+                    // 2. Generate shareable links
+                    const jsonData = JSON.stringify(cardData);
+                    
+                    // Try LZString compression first
+                    const compressed = LZString.compressToEncodedURIComponent(jsonData);
+                    let shareUrl;
+                    
+                    if (compressed && compressed.length < 2000) {
+                        // Use compressed URL if it's not too long
+                        shareUrl = `${window.location.origin}/view.html?data=${compressed}`;
+                        console.log('Using LZString compressed URL, length:', compressed.length);
+                    } else {
+                        // Fallback to base64
+                        const base64Data = btoa(unescape(encodeURIComponent(jsonData)));
+                        shareUrl = `${window.location.origin}/view.html?data=${encodeURIComponent(base64Data)}`;
+                        console.log('Using base64 URL, length:', base64Data.length);
+                    }
+                    
+                    // Also create a short ID-based URL for same device
+                    const shortUrl = `${window.location.origin}/view.html?id=${cardData.id}`;
+                    
+                    // Display the URL
+                    document.getElementById('generatedLink').value = shareUrl;
+                    document.getElementById('generatedLink').dataset.shortUrl = shortUrl;
+                    document.getElementById('generatedLink').dataset.fullUrl = shareUrl;
+                    
+                    // Show the generated link section
                     document.getElementById('generatedLinkSection').classList.remove('hidden');
                     
-                    // Scroll to generated link section
-                    document.getElementById('generatedLinkSection').scrollIntoView({ 
-                        behavior: 'smooth', 
-                        block: 'nearest'
-                    });
-                    
                     // Setup share buttons
+                    const shareText = `🎉 Check out this celebration card for ${cardData.recipientName}! Created with Celebration Wishes ✨\n\n`;
+                    
+                    // WhatsApp share
                     document.getElementById('whatsappShare').href = 
-                        `https://wa.me/?text=${encodeURIComponent(`Check out this celebration card made for you! ${shareLink}`)}`;
+                        `https://wa.me/?text=${encodeURIComponent(shareText + shareUrl)}`;
+                    
+                    // Email share
                     document.getElementById('emailShare').href = 
-                        `mailto:?subject=You've received a celebration card!&body=Click here to view your card: ${shareLink}`;
+                        `mailto:?subject=You've received a celebration card from ${cardData.senderName}!&body=${encodeURIComponent(shareText + shareUrl + '\n\nShort link (same device only): ' + shortUrl)}`;
                     
                     // Reset button
                     generateButton.innerHTML = originalText;
                     generateButton.disabled = false;
                     
+                    // Auto-copy to clipboard
+                    navigator.clipboard.writeText(shareUrl).then(() => {
+                        console.log('URL copied to clipboard');
+                        
+                        // Update copy button state
+                        const copyButton = document.getElementById('copyLinkButton');
+                        copyButton.innerHTML = '<i class="fas fa-check mr-2"></i> Copied!';
+                        copyButton.classList.remove('from-green-500', 'to-emerald-600');
+                        copyButton.classList.add('from-green-600', 'to-emerald-700');
+                        
+                        setTimeout(() => {
+                            copyButton.innerHTML = '📋 Copy Link';
+                            copyButton.classList.remove('from-green-600', 'to-emerald-700');
+                            copyButton.classList.add('from-green-500', 'to-emerald-600');
+                        }, 3000);
+                    }).catch(err => {
+                        console.log('Could not copy URL:', err);
+                    });
+                    
                     // Show success popup
                     setTimeout(() => {
                         document.getElementById('successPopup').classList.remove('hidden');
-                        navigator.clipboard.writeText(shareLink);
                     }, 500);
+                    
                 }, 1500);
             });
             
-            // Copy link to clipboard
+            // Copy link button
             document.getElementById('copyLinkButton').addEventListener('click', () => {
-                navigator.clipboard.writeText(document.getElementById('generatedLink').value).then(() => {
+                const link = document.getElementById('generatedLink').dataset.fullUrl || 
+                            document.getElementById('generatedLink').value;
+                
+                navigator.clipboard.writeText(link).then(() => {
                     const button = document.getElementById('copyLinkButton');
                     const originalText = button.textContent;
                     button.innerHTML = '<i class="fas fa-check mr-2"></i> Copied!';
                     button.classList.remove('from-green-500', 'to-emerald-600');
                     button.classList.add('from-green-600', 'to-emerald-700');
                     
+                    showToast('✨ Link copied to clipboard! Share it anywhere!');
+                    
                     setTimeout(() => {
                         button.innerHTML = originalText;
                         button.classList.remove('from-green-600', 'to-emerald-700');
                         button.classList.add('from-green-500', 'to-emerald-600');
                     }, 2000);
+                }).catch(err => {
+                    console.error('Failed to copy:', err);
+                    showToast('Unable to copy. Please select and copy manually.', 'error');
                 });
             });
             
@@ -1051,9 +1109,9 @@
                 // Update photo if exists
                 const photoContainer = document.getElementById(`previewPhotoContainer${i}`);
                 if (photoContainer && uploadedPhotoBase64) {
-                    photoContainer.innerHTML = `<img src="${uploadedPhotoBase64}" class="w-full h-full object-cover rounded-full">`;
-                } else if (photoContainer) {
-                    photoContainer.innerHTML = `<i class="fas ${occasionInfo.icon} text-white text-${i === 3 ? '3xl md:text-5xl' : '2xl md:text-4xl'}"></i>`;
+                    photoContainer.innerHTML = `<img src="${uploadedPhotoBase64}" class="w-full h-full object-cover rounded-full" style="border: ${i === 3 ? '4px' : '4px'} solid ${i === 3 ? '#fbbf24' : 'white'}">`;
+                } else if (photoContainer && !photoContainer.querySelector('img')) {
+                    photoContainer.innerHTML = `<i class="fas ${occasionInfo.icon} ${i === 3 ? 'text-amber-500' : 'text-white'} text-${i === 3 ? '3xl md:text-5xl' : '2xl md:text-4xl'}"></i>`;
                 }
                 
                 // Update name
@@ -1063,6 +1121,8 @@
                     if (i === 1) {
                         nameElement.className = `text-3xl md:text-5xl font-bold mb-4 md:mb-6 bg-gradient-to-r ${theme.text} bg-clip-text text-transparent`;
                     }
+                } else if (nameElement) {
+                    nameElement.textContent = "Alex!";
                 }
                 
                 // Update message
@@ -1092,7 +1152,7 @@
             }
         }
         
-        // Create floating hearts animation (from new version)
+        // Create floating hearts animation
         function createFloatingHearts() {
             const colors = ['#ff6b6b', '#4ecdc4', '#ffd166', '#06d6a0', '#118ab2', '#ef476f'];
             const container = document.getElementById('confettiContainer');
@@ -1131,7 +1191,7 @@
             }, 3000);
         }
         
-        // Create confetti effect (enhanced from both versions)
+        // Create confetti effect
         function createConfetti() {
             const colors = ['#ff6b6b', '#4ecdc4', '#ffd166', '#06d6a0', '#118ab2', '#ef476f', '#06b6d4', '#10b981', '#f59e0b', '#8b5cf6'];
             const container = document.getElementById('confettiContainer');
@@ -1165,6 +1225,34 @@
                     animation.remove();
                 }, 2000);
             }
+        }
+        
+        // Toast notification
+        function showToast(message, type = 'success') {
+            const colors = {
+                success: 'from-green-600 to-emerald-700',
+                warning: 'from-amber-600 to-orange-700',
+                error: 'from-red-600 to-rose-700'
+            };
+            
+            const icons = {
+                success: 'fa-check-circle',
+                warning: 'fa-exclamation-triangle',
+                error: 'fa-exclamation-circle'
+            };
+            
+            const toast = document.createElement('div');
+            toast.className = `fixed top-6 left-1/2 transform -translate-x-1/2 bg-gradient-to-r ${colors[type]} text-white px-6 py-3 rounded-full shadow-2xl z-50 animate-pop-in flex items-center`;
+            toast.innerHTML = `
+                <i class="fas ${icons[type]} mr-2"></i>
+                <span>${message}</span>
+            `;
+            document.body.appendChild(toast);
+            
+            setTimeout(() => {
+                toast.classList.add('opacity-0', 'transform', '-translate-y-4');
+                setTimeout(() => toast.remove(), 300);
+            }, 3000);
         }
         
         // Mobile-specific scroll functions

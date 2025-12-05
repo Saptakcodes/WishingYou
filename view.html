@@ -4,6 +4,8 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=5.0">
     <title>🎉 Your Celebration Card | Celebration Wishes 🎉</title>
+    <!-- Add this to both create.html and view.html -->
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/lz-string/1.4.4/lz-string.min.js"></script>
     <script src="https://cdn.tailwindcss.com"></script>
     <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
     <link href="https://fonts.googleapis.com/css2?family=Pacifico&family=Nunito:wght@400;600;700;800&display=swap" rel="stylesheet">
@@ -290,6 +292,20 @@
         @keyframes textGlow {
             0%, 100% { filter: brightness(1); }
             50% { filter: brightness(1.5); }
+        }
+        
+        /* New animation classes */
+        .animate-pop-in {
+            animation: popIn 0.5s ease-out;
+        }
+        
+        @keyframes popIn {
+            0% { transform: scale(0.5); opacity: 0; }
+            100% { transform: scale(1); opacity: 1; }
+        }
+        
+        .animate-ripple {
+            animation: ripple 2s infinite;
         }
     </style>
 </head>
@@ -722,18 +738,62 @@
             }
         };
         
-        // Initialize the card with enhanced effects
+        // Initialize the card with enhanced fallback system
         function initCard() {
             const urlParams = new URLSearchParams(window.location.search);
             const cardId = urlParams.get('id');
             const encodedData = urlParams.get('data');
             
-            // Try localStorage first
+            console.log('Loading card with params:', { cardId, encodedData: encodedData?.substring(0, 50) + '...' });
+            
+            // Priority 1: Try URL data parameter first (universal)
+            if (encodedData) {
+                try {
+                    // Try LZString decompression first
+                    const decompressed = LZString.decompressFromEncodedURIComponent(encodedData);
+                    if (decompressed) {
+                        cardData = JSON.parse(decompressed);
+                        console.log('Successfully loaded from LZString compressed data');
+                    } else {
+                        // Fallback to base64 decode
+                        try {
+                            const decodedData = atob(encodedData);
+                            cardData = JSON.parse(decodedData);
+                            console.log('Successfully loaded from base64 data');
+                        } catch (e) {
+                            // Try URL decode then base64
+                            const urlDecoded = decodeURIComponent(encodedData);
+                            const decodedData = atob(urlDecoded);
+                            cardData = JSON.parse(decodedData);
+                            console.log('Successfully loaded from URL decoded + base64 data');
+                        }
+                    }
+                    
+                    // Add ID if not present
+                    if (cardData && !cardData.id) {
+                        cardData.id = 'card_' + Date.now() + '_' + Math.random().toString(36).substr(2, 12);
+                    }
+                    
+                    // Save to localStorage for faster loading next time
+                    if (cardData && cardData.id) {
+                        localStorage.setItem(cardData.id, JSON.stringify(cardData));
+                    }
+                    
+                    loadCard();
+                    createWelcomeCelebration();
+                    return;
+                } catch (error) {
+                    console.error("Error loading from URL data:", error);
+                }
+            }
+            
+            // Priority 2: Try localStorage with cardId
             if (cardId) {
                 const storedData = localStorage.getItem(cardId);
                 if (storedData) {
                     try {
                         cardData = JSON.parse(storedData);
+                        console.log('Successfully loaded from localStorage');
                         loadCard();
                         createWelcomeCelebration();
                         return;
@@ -743,23 +803,29 @@
                 }
             }
             
-            // Fallback to URL parameter
-            if (encodedData) {
+            // Priority 3: Try URL hash fragment as last resort
+            const hash = window.location.hash.substring(1);
+            if (hash) {
                 try {
-                    const decodedData = atob(encodedData);
-                    cardData = JSON.parse(decodedData);
-                    if (cardData && !cardData.id) {
-                        cardData.id = 'card_' + Date.now() + '_' + Math.random().toString(36).substr(2, 12);
+                    const decompressed = LZString.decompressFromEncodedURIComponent(hash);
+                    if (decompressed) {
+                        cardData = JSON.parse(decompressed);
+                        console.log('Successfully loaded from hash fragment (LZString)');
+                    } else {
+                        const decoded = atob(hash);
+                        cardData = JSON.parse(decoded);
+                        console.log('Successfully loaded from hash fragment (base64)');
                     }
-                    localStorage.setItem(cardData.id, JSON.stringify(cardData));
                     loadCard();
                     createWelcomeCelebration();
+                    return;
                 } catch (error) {
-                    showError();
+                    console.error("Error loading from hash:", error);
                 }
-            } else {
-                showError();
             }
+            
+            // If nothing works, show error
+            showError();
         }
         
         function loadCard() {
@@ -768,6 +834,10 @@
             startEnhancedCelebrations();
             startTimeTracker();
             celebrationStats.classList.remove('hidden');
+            
+            // Increment view count
+            viewCount++;
+            updateStats();
         }
         
         function showError() {
@@ -821,6 +891,8 @@
                 const photoContainer = document.getElementById(`template${i}Photo`);
                 if (photoContainer && cardData.photo) {
                     photoContainer.innerHTML = `<img src="${cardData.photo}" class="w-full h-full object-cover rounded-full" style="border: 8px solid rgba(255,255,255,0.8);">`;
+                } else if (photoContainer && !photoContainer.querySelector('img')) {
+                    photoContainer.innerHTML = `<i id="template${i}Icon" class="fas ${occasionInfo.icon} text-white text-${i === 3 ? '4xl md:text-6xl' : '3xl md:text-5xl'}"></i>`;
                 }
                 
                 // Update name
@@ -875,10 +947,6 @@
                 playSound(confettiSound);
                 playSound(fireworkSound);
             }, 500);
-            
-            // Increment view count
-            viewCount++;
-            updateStats();
         }
         
         // Start enhanced celebrations
@@ -1148,34 +1216,59 @@
         
         // Event Listeners with enhanced effects
         shareButton.addEventListener('click', () => {
-            const shareText = `🎉 Check out this amazing celebration card created for ${cardData?.recipientName || 'me'}! ✨`;
-            const shareUrl = window.location.href;
+            if (!cardData) return;
+            
+            const shareText = `🎉 Check out this amazing celebration card created for ${cardData.recipientName || 'me'}! ✨`;
+            
+            // Generate shareable URL with compressed data
+            const jsonData = JSON.stringify(cardData);
+            const compressed = LZString.compressToEncodedURIComponent(jsonData);
+            const shareUrl = `${window.location.origin}${window.location.pathname}?data=${compressed}`;
             
             if (navigator.share) {
                 navigator.share({
-                    title: 'Celebration Card',
+                    title: `Celebration Card for ${cardData.recipientName}`,
                     text: shareText,
                     url: shareUrl,
+                }).catch(err => {
+                    console.log('Share API failed:', err);
+                    copyToClipboardWithFeedback(shareUrl);
                 });
             } else {
-                navigator.clipboard.writeText(shareUrl).then(() => {
-                    // Create celebration effect
-                    createConfettiBurst(80);
-                    createEmojiRain();
-                    
-                    // Show notification
-                    const notification = document.createElement('div');
-                    notification.className = 'fixed top-6 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-green-600 to-emerald-700 text-white px-6 py-3 rounded-full shadow-2xl z-50 animate-pop-in';
-                    notification.innerHTML = '<i class="fas fa-check mr-2"></i> Link copied to clipboard! Share the magic! ✨';
-                    document.body.appendChild(notification);
-                    
-                    setTimeout(() => {
-                        notification.classList.add('opacity-0', 'transform', '-translate-y-4');
-                        setTimeout(() => notification.remove(), 300);
-                    }, 3000);
-                });
+                copyToClipboardWithFeedback(shareUrl);
             }
         });
+        
+        function copyToClipboardWithFeedback(text) {
+            navigator.clipboard.writeText(text).then(() => {
+                // Create celebration effect
+                createConfettiBurst(80);
+                createEmojiRain();
+                
+                // Show notification
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-6 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-green-600 to-emerald-700 text-white px-6 py-3 rounded-full shadow-2xl z-50 animate-pop-in flex items-center';
+                notification.innerHTML = '<i class="fas fa-check mr-2"></i> Link copied to clipboard! Share the magic! ✨';
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.classList.add('opacity-0', 'transform', '-translate-y-4');
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+            }).catch(err => {
+                console.error('Failed to copy:', err);
+                // Fallback for browsers that don't support clipboard API
+                const textArea = document.createElement('textarea');
+                textArea.value = text;
+                document.body.appendChild(textArea);
+                textArea.select();
+                document.execCommand('copy');
+                document.body.removeChild(textArea);
+                
+                // Still show feedback
+                createConfettiBurst(80);
+            });
+        }
         
         playMusicButton.addEventListener('click', () => {
             if (musicPlaying) {
@@ -1222,49 +1315,74 @@
         });
         
         takeScreenshotButton.addEventListener('click', () => {
-            if (typeof html2canvas !== 'undefined') {
-                // Add screenshot effect
-                cardContainer.style.filter = 'brightness(1.2)';
-                setTimeout(() => cardContainer.style.filter = '', 300);
-                
-                html2canvas(cardContainer, {
-                    backgroundColor: null,
-                    scale: 2,
-                    useCORS: true
-                }).then(canvas => {
-                    const link = document.createElement('a');
-                    link.download = 'celebration-card.png';
-                    link.href = canvas.toDataURL();
-                    link.click();
-                    
-                    // Create camera emoji effect
-                    const cameraEmoji = document.createElement('div');
-                    cameraEmoji.className = 'particle celebration-emoji';
-                    cameraEmoji.style.fontSize = '48px';
-                    cameraEmoji.style.left = '50%';
-                    cameraEmoji.style.top = '50%';
-                    cameraEmoji.style.transform = 'translate(-50%, -50%)';
-                    cameraEmoji.textContent = '📸';
-                    cameraEmoji.style.zIndex = '1000';
-                    document.body.appendChild(cameraEmoji);
-                    
-                    setTimeout(() => cameraEmoji.remove(), 2000);
-                    
-                    // Show notification
-                    const notification = document.createElement('div');
-                    notification.className = 'fixed top-6 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-blue-600 to-cyan-700 text-white px-6 py-3 rounded-full shadow-2xl z-50 animate-pop-in';
-                    notification.innerHTML = '<i class="fas fa-check mr-2"></i> Screenshot saved! 📸';
-                    document.body.appendChild(notification);
-                    
-                    setTimeout(() => {
-                        notification.classList.add('opacity-0', 'transform', '-translate-y-4');
-                        setTimeout(() => notification.remove(), 300);
-                    }, 3000);
-                });
+            // Show loading state
+            takeScreenshotButton.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Capturing...';
+            takeScreenshotButton.disabled = true;
+            
+            // Check if html2canvas is loaded
+            if (typeof html2canvas === 'undefined') {
+                // Load html2canvas if not loaded
+                const script = document.createElement('script');
+                script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+                script.onload = () => {
+                    captureScreenshot();
+                };
+                document.head.appendChild(script);
             } else {
-                alert('📸 Screenshot feature is loading... Please try again in a moment.');
+                captureScreenshot();
             }
         });
+        
+        function captureScreenshot() {
+            // Add screenshot effect
+            cardContainer.style.filter = 'brightness(1.2)';
+            setTimeout(() => cardContainer.style.filter = '', 300);
+            
+            html2canvas(cardContainer, {
+                backgroundColor: null,
+                scale: 2,
+                useCORS: true,
+                allowTaint: true
+            }).then(canvas => {
+                const link = document.createElement('a');
+                link.download = `celebration-card-${Date.now()}.png`;
+                link.href = canvas.toDataURL('image/png');
+                link.click();
+                
+                // Create camera emoji effect
+                const cameraEmoji = document.createElement('div');
+                cameraEmoji.className = 'particle celebration-emoji';
+                cameraEmoji.style.fontSize = '48px';
+                cameraEmoji.style.left = '50%';
+                cameraEmoji.style.top = '50%';
+                cameraEmoji.style.transform = 'translate(-50%, -50%)';
+                cameraEmoji.textContent = '📸';
+                cameraEmoji.style.zIndex = '1000';
+                document.body.appendChild(cameraEmoji);
+                
+                setTimeout(() => cameraEmoji.remove(), 2000);
+                
+                // Show notification
+                const notification = document.createElement('div');
+                notification.className = 'fixed top-6 left-1/2 transform -translate-x-1/2 bg-gradient-to-r from-blue-600 to-cyan-700 text-white px-6 py-3 rounded-full shadow-2xl z-50 animate-pop-in';
+                notification.innerHTML = '<i class="fas fa-check mr-2"></i> Screenshot saved! 📸';
+                document.body.appendChild(notification);
+                
+                setTimeout(() => {
+                    notification.classList.add('opacity-0', 'transform', '-translate-y-4');
+                    setTimeout(() => notification.remove(), 300);
+                }, 3000);
+                
+                // Reset button
+                takeScreenshotButton.innerHTML = '<i class="fas fa-camera mr-2"></i> 📸 Capture Moment';
+                takeScreenshotButton.disabled = false;
+            }).catch(err => {
+                console.error('Screenshot failed:', err);
+                alert('📸 Screenshot feature failed. Please try again!');
+                takeScreenshotButton.innerHTML = '<i class="fas fa-camera mr-2"></i> 📸 Capture Moment';
+                takeScreenshotButton.disabled = false;
+            });
+        }
         
         sendThanksButton.addEventListener('click', () => {
             const thanksModal = document.createElement('div');
@@ -1323,7 +1441,7 @@
             
             // Auto-play music on first interaction
             const enableMusic = () => {
-                if (!musicPlaying && cardData?.effects?.includes('music')) {
+                if (!musicPlaying && cardData?.effects && cardData.effects.includes && cardData.effects.includes('music')) {
                     celebrationMusic.play().catch(() => {
                         console.log("Music autoplay blocked");
                     });
@@ -1363,7 +1481,18 @@
         });
     </script>
     
-    <!-- HTML2Canvas for screenshot -->
-    <script src="https://html2canvas.hertzen.com/dist/html2canvas.min.js"></script>
+    <!-- HTML2Canvas for screenshot - Load only when needed -->
+    <script>
+        // Dynamically load html2canvas when needed
+        function loadHtml2Canvas() {
+            if (typeof html2canvas === 'undefined') {
+                const script = document.createElement('script');
+                script.src = 'https://html2canvas.hertzen.com/dist/html2canvas.min.js';
+                document.head.appendChild(script);
+                return script;
+            }
+            return Promise.resolve();
+        }
+    </script>
 </body>
 </html>
